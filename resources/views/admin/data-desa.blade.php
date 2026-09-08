@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Data & Statistik Desa - ' . ($activeDesa->name ?? 'Desa Waha'))
 

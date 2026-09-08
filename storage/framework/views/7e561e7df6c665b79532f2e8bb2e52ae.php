@@ -77,15 +77,15 @@
 
             
             <a href="<?php echo e(route('admin.data-desa')); ?>" class="admin-nav-link <?php echo e(request()->routeIs('admin.data-desa*') ? 'active' : ''); ?>">
-                <span class="admin-nav-icon">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 19V5"/>
-                        <path d="M4 19h17"/>
-                        <path d="m7 15 4-4 3 2 5-6"/>
-                    </svg>
-                </span>
-                <span>Data Desa</span>
-            </a>
+    <span class="admin-nav-icon">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19V5"/>
+            <path d="M4 19h17"/>
+            <path d="m7 15 4-4 3 2 5-6"/>
+        </svg>
+    </span>
+    <span>Data Desa</span>
+</a>
 
             
             <div class="admin-nav-dropdown <?php echo e((request()->routeIs('admin.layanan*') || request()->routeIs('admin.pengajuan*')) ? 'open' : ''); ?>">

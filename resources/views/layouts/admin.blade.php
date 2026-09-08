@@ -78,15 +78,15 @@
 
             {{-- DATA DESA --}}
             <a href="{{ route('admin.data-desa') }}" class="admin-nav-link {{ request()->routeIs('admin.data-desa*') ? 'active' : '' }}">
-                <span class="admin-nav-icon">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 19V5"/>
-                        <path d="M4 19h17"/>
-                        <path d="m7 15 4-4 3 2 5-6"/>
-                    </svg>
-                </span>
-                <span>Data Desa</span>
-            </a>
+    <span class="admin-nav-icon">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19V5"/>
+            <path d="M4 19h17"/>
+            <path d="m7 15 4-4 3 2 5-6"/>
+        </svg>
+    </span>
+    <span>Data Desa</span>
+</a>
 
             {{-- LAYANAN DROPDOWN --}}
             <div class="admin-nav-dropdown {{ (request()->routeIs('admin.layanan*') || request()->routeIs('admin.pengajuan*')) ? 'open' : '' }}">

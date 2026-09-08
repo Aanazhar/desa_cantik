@@ -1,0 +1,4 @@
+<?php
+namespace App\Providers;
+use Illuminate\Support\ServiceProvider;use App\Models\DesaProfile;use App\Models\SiteContent;
+class AppServiceProvider extends ServiceProvider { public function register():void{} public function boot():void{view()->composer('*',function($view){$desa=DesaProfile::find((int)session('desa_id',1));$contents=SiteContent::where('desa_id',$desa?->id)->pluck('value','key');$publication=['badge'=>$contents['publication_badge']??'PUBLIKASI DESA','title'=>$contents['publication_title']??'Informasi Terbaru Desa','description'=>$contents['publication_description']??'Informasi dan pengumuman resmi Pemerintah Desa.','button'=>$contents['publication_button']??'Lihat Selengkapnya','link'=>$contents['publication_link']??route('publikasi')];$view->with('activeDesa',$desa)->with('publication',$publication);});}}

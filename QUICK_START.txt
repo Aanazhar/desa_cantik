@@ -1,0 +1,246 @@
+🚀 QUICK START GUIDE - FITUR PROFIL DESA SECTIONS
+
+═══════════════════════════════════════════════════════════════
+
+INSTALASI CEPAT (5 MENIT)
+
+1. RUN MIGRATION
+   php artisan migrate
+
+2. RUN SEEDER
+   php artisan db:seed --class=DesaProfileSectionSeeder
+
+3. CLEAR CACHE
+   php artisan cache:clear
+   php artisan config:cache
+
+4. DONE! ✅
+
+═══════════════════════════════════════════════════════════════
+
+AKSES FITUR
+
+ADMIN PANEL:
+→ Login admin
+→ Sidebar: "Kelola Profil Desa" (📋)
+→ Edit konten setiap section
+→ Upload gambar
+→ Toggle aktif/nonaktif
+
+PUBLIC PAGE:
+→ Buka /profil-desa
+→ Scroll ke section profil
+→ Klik tab untuk berganti section
+
+═══════════════════════════════════════════════════════════════
+
+7 SECTION YANG TERSEDIA
+
+1. Tentang Desa - Informasi umum
+2. Profil Kepala Desa - Foto + info KPD (gambar support)
+3. Profil Wilayah - Batas & karakteristik (gambar support)
+4. Visi & Misi - Visi dan misi desa
+5. Struktur Organisasi - Bagan org (gambar support)
+6. Peta Desa - Peta wilayah (gambar support)
+7. Perangkat Desa - Daftar perangkat (gambar support)
+
+═══════════════════════════════════════════════════════════════
+
+FILE-FILE PENTING
+
+DATABASE:
+├── database/migrations/2026_08_16_000001_create_desa_profile_sections_table.php
+├── database/seeders/DesaProfileSectionSeeder.php
+
+MODEL:
+├── app/Models/DesaProfileSection.php
+
+CONTROLLER:
+├── app/Http/Controllers/Admin/DesaProfileSectionController.php (BARU)
+├── app/Http/Controllers/HomeController.php (UPDATED)
+
+VIEWS:
+├── resources/views/profil-desa-tabbed.blade.php (BARU - Frontend)
+├── resources/views/admin/desa-profile-sections.blade.php (BARU - Admin)
+├── resources/views/layouts/admin.blade.php (UPDATED - Menu)
+
+ROUTES:
+├── routes/web.php (UPDATED - 4 route baru)
+
+DOCS:
+├── FITUR_PROFIL_DESA_SECTIONS.md (Dokumentasi lengkap)
+├── IMPLEMENTASI_SUMMARY.md (Summary teknis)
+
+═══════════════════════════════════════════════════════════════
+
+TESTING CHECKLIST
+
+BACKEND:
+✓ Migration runs without error
+✓ Tabel desa_profile_sections created
+✓ Seeder initializes data correctly
+✓ Can access /admin/desa-profile-sections
+
+ADMIN UI:
+✓ Menu visible di sidebar
+✓ Can edit content
+✓ Can upload image (4 section)
+✓ Can toggle active/inactive
+✓ Changes saved correctly
+✓ Only active sections show in public
+
+PUBLIC DISPLAY:
+✓ Tab navigation visible
+✓ Can switch between tabs
+✓ Content displays correctly
+✓ Images load properly
+✓ Mobile responsive
+✓ Only active sections visible
+
+═══════════════════════════════════════════════════════════════
+
+ROUTES REFERENCE
+
+Admin Panel:
+GET    /admin/desa-profile-sections
+PUT    /admin/desa-profile-sections/{id}
+PATCH  /admin/desa-profile-sections/{id}/toggle
+POST   /admin/desa-profile-sections/reorder
+
+Public:
+GET    /profil-desa (using HomeController@profile)
+
+═══════════════════════════════════════════════════════════════
+
+COMMON ISSUES & FIXES
+
+Problem: Admin menu tidak muncul
+Fix: 
+  - php artisan cache:clear
+  - php artisan config:cache
+  - Refresh browser (Ctrl+F5)
+
+Problem: Tabel tidak exist
+Fix:
+  - php artisan migrate
+  - php artisan migrate:fresh --seed (untuk dev)
+
+Problem: Gambar tidak terupload
+Fix:
+  - Check public/uploads folder writable (chmod 755)
+  - Check file size < 5MB
+  - Check format: JPG, PNG, WebP, GIF only
+  - Check Laravel storage permissions
+
+Problem: Tab tidak responsive
+Fix:
+  - Clear browser cache
+  - Check no CSS/JS conflict
+  - Check browser console for errors
+
+═══════════════════════════════════════════════════════════════
+
+DATABASE SCHEMA QUICK LOOK
+
+Table: desa_profile_sections
+┌─────────────────────┬──────────────────┬──────────────┐
+│ Column              │ Type             │ Special      │
+├─────────────────────┼──────────────────┼──────────────┤
+│ id                  │ BIGINT (PK)      │              │
+│ desa_profile_id     │ BIGINT (FK)      │ CASCADE DEL  │
+│ section_type        │ ENUM (7 options) │ NOT NULL     │
+│ content             │ TEXT             │              │
+│ image               │ VARCHAR          │              │
+│ is_active           │ BOOLEAN          │ DEFAULT true │
+│ order               │ INT              │ DEFAULT 0    │
+│ created_at          │ TIMESTAMP        │              │
+│ updated_at          │ TIMESTAMP        │              │
+├─────────────────────┴──────────────────┴──────────────┤
+│ UNIQUE (desa_profile_id, section_type)                 │
+└────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════
+
+DEVELOPMENT COMMANDS
+
+# Fresh database with sections
+php artisan migrate:fresh --seed
+
+# Only profile sections
+php artisan db:seed --class=DesaProfileSectionSeeder
+
+# Reset migrations
+php artisan migrate:reset
+
+# Rollback last migration
+php artisan migrate:rollback
+
+# Check routes
+php artisan route:list | grep desa-profile-sections
+
+# Clear all caches
+php artisan cache:clear
+php artisan config:cache
+php artisan route:cache
+
+═══════════════════════════════════════════════════════════════
+
+CUSTOMIZATION TIPS
+
+Change section label:
+- Edit app/Models/DesaProfileSection.php → getSectionLabel()
+
+Change tab styling:
+- Edit resources/views/profil-desa-tabbed.blade.php → <style>
+
+Add new section type:
+- Update enum di migration
+- Update getAllSections()
+- Update getSectionLabel()
+- Add form field di admin view
+
+Increase file upload limit:
+- Edit DesaProfileSectionController → uploadImage()
+- Change max file size validation
+
+═══════════════════════════════════════════════════════════════
+
+FEATURES OVERVIEW
+
+✅ Multi-section management
+✅ Toggle active/inactive per section
+✅ Image support for 4 sections
+✅ Text content for all sections
+✅ Responsive design
+✅ Multi-desa support
+✅ Admin dashboard
+✅ Tab navigation frontend
+✅ Auto-initialization via seeder
+✅ Cascade delete protection
+
+═══════════════════════════════════════════════════════════════
+
+NEXT STEPS
+
+1. ✓ Run migration & seeder
+2. ✓ Test admin panel
+3. ✓ Add content to sections
+4. ✓ Upload images
+5. ✓ Toggle active/inactive
+6. ✓ Check public page
+7. ✓ Test responsiveness
+8. ✓ Deploy to production
+
+═══════════════════════════════════════════════════════════════
+
+SUPPORT DOCUMENTATION
+
+- FITUR_PROFIL_DESA_SECTIONS.md → Full documentation
+- IMPLEMENTASI_SUMMARY.md → Technical details
+- This file → Quick reference
+
+═══════════════════════════════════════════════════════════════
+
+Last Updated: August 16, 2026
+Status: Production Ready ✅
+Version: 1.0

@@ -1,0 +1,8 @@
+@extends('layouts.admin')
+@section('title','Konten Halaman')
+@section('content')
+<div class="admin-page-header"><div><span class="section-label">KONTEN WEBSITE</span><h1>Halaman Profil & Data Desa</h1><p>Kelola halaman tambahan Profil Desa dan seluruh halaman Data Desa. Data yang disimpan di sini otomatis menjadi sumber informasi pada website publik.</p></div><a class="admin-btn admin-btn-primary" href="{{ route('admin.pages.create') }}">+ Tambah Halaman</a></div>
+@if(session('success'))<div class="admin-alert admin-alert-success">{{ session('success') }}</div>@endif
+<div class="data-table-wrapper"><table class="data-table"><thead><tr><th>No</th><th>Kategori</th><th>Judul</th><th>Slug</th><th>Status</th><th>Aksi</th></tr></thead><tbody>@forelse($pages as $i=>$page)<tr><td>{{ $pages->firstItem()+$i }}</td><td><span class="badge">{{ $page->category==='profil'?'Profil Desa':'Data Desa' }}</span></td><td><strong>{{ $page->title }}</strong></td><td>/{{ $page->category }}/{{ $page->slug }}</td><td>{{ $page->active?'Aktif':'Draft' }}</td><td><a class="admin-btn admin-btn-secondary" href="{{ $page->category==='profil'?route('profil.page',$page->slug):route('data.page',$page->slug) }}" target="_blank">Lihat</a> <a class="admin-btn admin-btn-secondary" href="{{ route('admin.pages.edit',$page) }}">Edit</a><form style="display:inline" method="POST" action="{{ route('admin.pages.destroy',$page) }}" onsubmit="return confirm('Hapus halaman ini?')">@csrf @method('DELETE')<button class="admin-delete-btn">Hapus</button></form></td></tr>@empty<tr><td colspan="6" class="table-empty">Belum ada halaman.</td></tr>@endforelse</tbody></table></div>
+<div style="margin-top:20px">{{ $pages->links() }}</div>
+@endsection

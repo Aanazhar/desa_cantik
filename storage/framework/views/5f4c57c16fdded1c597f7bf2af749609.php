@@ -1,564 +1,1056 @@
-<?php $__env->startSection('title', 'Data & Statistik Desa - ' . ($activeDesa->name ?? 'Desa Waha')); ?>
+<?php $__env->startSection('title', 'Kelola Data & Statistik Desa - Admin'); ?>
 
-<?php $__env->startPush('styles'); ?>
+<?php $__env->startSection('content'); ?>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-    /* GLOBAL FONT INTER */
+    /* COMPACT & SLEEK ADMIN DATA DESA */
+    html {
+        scroll-behavior: smooth;
+    }
     body, h1, h2, h3, h4, h5, h6, p, a, span, button, input, select, textarea {
         font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
     }
 
-    .data-page { 
-        background: #f8fafc; 
-        color: #1e293b; 
-        padding-bottom: 80px; 
-    }
-    
-    /* HERO BANNER */
-    .data-desa-hero { 
-        padding: 40px 0; 
-        background: linear-gradient(135deg, #1e6660 0%, #3c6772 50%, #0a4c60 100%); 
-        color: #ffffff; 
-        margin-bottom: 35px; 
-        box-shadow: 0 12px 35px rgba(15, 118, 110, 0.18); 
-    }
-    .data-desa-hero-inner { 
-        display: flex; 
-        justify-content: space-between; 
-        align-items: center; 
-        gap: 24px; 
-        flex-wrap: wrap; 
-    }
-    .data-hero-eyebrow { 
-        font-size: 11px; 
-        font-weight: 800; 
-        letter-spacing: 1.8px; 
-        text-transform: uppercase; 
-        background: rgba(255, 255, 255, 0.18); 
-        backdrop-filter: blur(8px); 
-        padding: 5px 14px; 
-        border-radius: 20px; 
-        color: #ffffff; 
-        display: inline-block; 
-        margin-bottom: 8px; 
-        border: 1px solid rgba(255, 255, 255, 0.25); 
-    }
-    .data-desa-hero h1 { 
-        font-size: clamp(1.6rem, 3.2vw, 2.3rem); 
-        margin: 4px 0 6px; 
-        font-weight: 800; 
-        color: #ffffff; 
-        letter-spacing: -0.5px; 
-    }
-    .data-desa-hero p { 
-        margin: 0; 
-        opacity: 0.95; 
-        font-size: 0.95rem; 
-        color: #e0f2fe; 
+    .data-page-admin {
+        background: #f8fafc !important;
+        padding-bottom: 50px !important;
     }
 
-    /* KONTROL PRESISI RAPI (TAHUN & EXPORT BUTTONS) */
-    .data-hero-controls {
-        display: flex;
-        align-items: flex-end;
-        gap: 14px;
-        flex-wrap: wrap;
+    /* HERO BANNER RINGKAS */
+    .admin-hero-card {
+        background: linear-gradient(135deg, #1e6660 0%, #2a5b67 50%, #0a4c60 100%) !important;
+        border-radius: 14px !important;
+        color: #ffffff !important;
+        padding: 18px 24px !important;
+        box-shadow: 0 6px 20px rgba(10, 76, 96, 0.12) !important;
+        margin-bottom: 18px !important;
     }
 
-    .control-year-group {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
+    .hero-eyebrow {
+        background: rgba(255, 255, 255, 0.18) !important;
+        backdrop-filter: blur(6px) !important;
+        color: #ffffff !important;
+        font-weight: 800 !important;
+        font-size: 0.72rem !important;
+        letter-spacing: 0.5px !important;
+        padding: 3px 12px !important;
+        border-radius: 50px !important;
+        display: inline-block !important;
+        margin-bottom: 6px !important;
     }
 
-    .control-year-group label {
-        font-size: 0.78rem;
-        font-weight: 800;
-        color: #e0f2fe;
-        text-transform: uppercase;
-        letter-spacing: 0.8px;
+    /* KARTU SEKSI UTAMA FORM */
+    .card-section-admin {
+        background: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 16px !important;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.02) !important;
+        margin-bottom: 18px !important;
+        padding: 18px 20px !important;
     }
 
-    .hero-year-select {
-        padding: 10px 18px;
-        border-radius: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        background: #ffffff;
-        font-weight: 800;
-        font-size: 0.92rem;
-        color: #0f172a;
-        cursor: pointer;
-        outline: none;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    .card-section-header {
+        font-size: 0.98rem !important;
+        font-weight: 800 !important;
+        color: #0f172a !important;
+        border-left: 4px solid #1e6660 !important;
+        padding-left: 10px !important;
+        margin-bottom: 14px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
     }
 
-    .hero-year-select:hover {
-        transform: translateY(-2px);
+    /* FLEXBOX BERSAMPINGAN (SIDE-BY-SIDE CONTAINER 50%-50%) */
+    .flex-side-by-side {
+        display: flex !important;
+        gap: 14px !important;
+        flex-wrap: wrap !important;
     }
 
-    .btn-hero-export {
-        padding: 10px 18px;
-        border-radius: 12px;
-        border: 1px solid #0f766e;
-        background: #f0fdf4;
-        color: #0f766e;
-        font-weight: 800;
-        font-size: 0.9rem;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        height: 42px;
-        box-sizing: border-box;
+    .flex-side-item {
+        flex: 1 1 calc(50% - 7px) !important;
+        min-width: 300px !important;
     }
 
-    .btn-hero-export:hover {
-        background: #0f766e;
-        color: #ffffff;
-        transform: translateY(-3px) scale(1.05);
-        box-shadow: 0 8px 20px rgba(15, 118, 110, 0.25);
+    /* SUB-KARTU CONTAINER INPUT */
+    .form-subcard {
+        background: #f8fafc !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 12px !important;
+        padding: 14px 16px !important;
+        margin-bottom: 0 !important;
     }
 
-    /* NAV TAB KATEGORI */
-    .data-nav { 
-        display: flex; 
-        gap: 12px; 
-        flex-wrap: wrap; 
-        margin-bottom: 32px; 
-    }
-    .data-nav a { 
-        padding: 11px 22px; 
-        border-radius: 999px; 
-        background: #ffffff; 
-        border: 1px solid #e2e8f0; 
-        text-decoration: none; 
-        color: #475569; 
-        font-size: 0.92rem; 
-        font-weight: 700; 
-        transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); 
-        white-space: nowrap;
-    }
-    .data-nav a:hover {
-        transform: translateY(-3px) scale(1.04);
-        border-color: #0f766e;
-        color: #0f766e;
-    }
-    .data-nav a.active { 
-        background: #204d49; 
-        color: #ffffff; 
-        border-color: #1a5651; 
-        box-shadow: 0 8px 22px rgba(15, 118, 110, 0.28); 
+    .sub-title-teal {
+        font-size: 0.85rem !important;
+        font-weight: 800 !important;
+        color: #1e6660 !important;
+        margin-bottom: 10px !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 5px !important;
+        border-bottom: 1px dashed #cbd5e1 !important;
+        padding-bottom: 4px !important;
     }
 
-    /* SUMMARY CARDS DENGAN EFEK MELAYANG & MENGEMBANG */
-    .data-summary-grid { 
-        display: grid; 
-        grid-template-columns: repeat(4, 1fr); 
-        gap: 20px; 
-        margin-bottom: 35px; 
-    }
-    .summary-item { 
-        background: #ffffff; 
-        border: 1px solid #e2e8f0; 
-        border-radius: 20px; 
-        padding: 22px; 
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.03); 
-        position: relative; 
-        overflow: hidden; 
-        transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .summary-item:hover {
-        transform: translateY(-6px) scale(1.035);
-        box-shadow: 0 16px 35px rgba(15, 118, 110, 0.15);
-        border-color: #0f766e;
-    }
-    .summary-item::before { 
-        content: ''; 
-        position: absolute; 
-        top: 0; 
-        left: 0; 
-        right: 0; 
-        height: 4px; 
-        background: linear-gradient(90deg, #0f766e, #0891b2); 
-    }
-    .summary-item span { 
-        display: block; 
-        color: #64748b; 
-        font-size: 0.84rem; 
-        font-weight: 700; 
-        margin-bottom: 6px; 
-    }
-    .summary-item strong { 
-        display: block; 
-        font-size: 1.8rem; 
-        color: #0f172a; 
-        font-weight: 800; 
-        line-height: 1.2; 
-    }
-    .summary-item small { 
-        display: inline-block; 
-        margin-top: 6px; 
-        color: #0f766e; 
-        font-weight: 700; 
-        font-size: 0.78rem; 
-        background: #e6f4f1; 
-        padding: 3px 10px; 
-        border-radius: 8px; 
+    /* FORM INPUT CONTROL COMPACT */
+    .form-group-admin label {
+        font-size: 0.78rem !important;
+        font-weight: 700 !important;
+        color: #475569 !important;
+        margin-bottom: 4px !important;
+        display: block !important;
     }
 
-    /* LAYOUT GRAFIK */
-    .data-chart-grid-three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 28px; }
-    .data-chart-grid-two-unequal { display: grid; grid-template-columns: 1.5fr 1fr; gap: 24px; margin-bottom: 28px; }
-    .data-chart-grid-two { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 28px; }
-    .data-chart-grid-full { width: 100%; margin-bottom: 28px; }
-
-    /* =====================================================
-       KARTU GRAFIK 3D FLOATING & EXPANDING POP-UP EFFECT
-    ===================================================== */
-    .data-chart-card { 
-        background: #ffffff; 
-        border: 1px solid #e2e8f0; 
-        border-radius: 24px; 
-        padding: 24px; 
-        box-shadow: 0 6px 25px rgba(15, 23, 42, 0.04); 
-        transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease, border-color 0.3s ease;
-        position: relative;
-    }
-    .data-chart-card:hover { 
-        transform: translateY(-6px); 
-        box-shadow: 0 20px 45px rgba(15, 118, 110, 0.15), 0 8px 16px rgba(0, 0, 0, 0.04); 
-        border-color: #0f766e; 
-    }
-    .data-chart-card h3 { 
-        margin: 0 0 4px; 
-        font-size: 1.15rem; 
-        font-weight: 800; 
-        color: #0f172a; 
-    }
-    .data-chart-card p { 
-        color: #64748b; 
-        font-size: 0.85rem; 
-        margin: 0 0 16px; 
-    }
-    .data-chart-box { 
-        min-height: 260px; 
-        width: 100%; 
-        position: relative;
+    .input-group-custom {
+        display: flex !important;
+        align-items: center !important;
+        border: 1.5px solid #cbd5e1 !important;
+        border-radius: 8px !important;
+        background: #ffffff !important;
+        overflow: hidden !important;
+        transition: all 0.2s ease !important;
+        height: 35px !important;
     }
 
-    @keyframes modalFadeIn {
-        from { opacity: 0; transform: scale(0.95); }
-        to { opacity: 1; transform: scale(1); }
+    .input-group-custom:focus-within {
+        border-color: #1e6660 !important;
+        box-shadow: 0 0 0 3px rgba(30, 102, 96, 0.12) !important;
     }
 
-    /* =====================================================
-       RESPONSIVE MEDIA QUERIES (OPTIMAL UNTUK HP / ANDROID)
-    ===================================================== */
-    @media (max-width: 1024px) {
-        .data-summary-grid { grid-template-columns: repeat(2, 1fr); }
-        .data-chart-grid-three, .data-chart-grid-two-unequal, .data-chart-grid-two { grid-template-columns: 1fr; }
-        .data-hero-controls { width: 100%; margin-top: 14px; }
+    .input-group-icon {
+        background: #f1f5f9 !important;
+        color: #64748b !important;
+        font-size: 0.85rem !important;
+        padding: 0 10px !important;
+        font-weight: 700 !important;
+        border-right: 1px solid #e2e8f0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        height: 100% !important;
     }
 
-    @media (max-width: 768px) {
-        .data-page { padding-bottom: 50px; }
-        .data-desa-hero { padding: 26px 0 30px; margin-bottom: 22px; }
-        .data-desa-hero-inner { flex-direction: column; align-items: flex-start; gap: 14px; }
-        .data-hero-eyebrow { font-size: 10px; padding: 4px 10px; }
-        .data-desa-hero h1 { font-size: clamp(1.4rem, 5vw, 1.8rem); }
-        .data-desa-hero p { font-size: 0.88rem; }
+    .input-group-unit {
+        background: #f8fafc !important;
+        color: #64748b !important;
+        font-size: 0.72rem !important;
+        font-weight: 800 !important;
+        padding: 0 10px !important;
+        border-left: 1px solid #e2e8f0 !important;
+        text-transform: uppercase !important;
+        display: flex !important;
+        align-items: center !important;
+        height: 100% !important;
+    }
 
-        .data-hero-controls { width: 100%; gap: 10px; }
-        .control-year-group { width: 100%; }
-        .hero-year-select { width: 100%; text-align: center; }
-        .btn-hero-export { flex: 1; text-align: center; justify-content: center; font-size: 0.82rem; padding: 9px 12px; }
+    .form-control-styled {
+        width: 100% !important;
+        border: none !important;
+        padding: 0 10px !important;
+        font-size: 0.86rem !important;
+        font-weight: 700 !important;
+        color: #0f172a !important;
+        background: transparent !important;
+        height: 100% !important;
+    }
 
-        .data-nav {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            flex-wrap: nowrap;
-            padding-bottom: 8px;
-            margin-bottom: 22px;
-            -webkit-overflow-scrolling: touch;
-        }
+    .form-control-styled:focus {
+        outline: none !important;
+    }
 
-        .data-nav a {
-            flex-shrink: 0;
-            padding: 8px 16px;
-            font-size: 0.82rem;
-        }
+    /* GRID KOLOM INSIDE SUB-CARD */
+    .grid-2-cols {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+    }
 
-        .data-summary-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 22px; }
-        .summary-item { padding: 16px; border-radius: 16px; }
-        .summary-item span { font-size: 0.78rem; margin-bottom: 4px; }
-        .summary-item strong { font-size: 1.4rem; }
-        .summary-item small { font-size: 0.72rem; padding: 2px 7px; }
+    .grid-3-cols {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 10px !important;
+    }
 
-        .data-chart-card { padding: 18px; border-radius: 18px; margin-bottom: 18px; }
-        .data-chart-card h3 { font-size: 1rem; }
-        .data-chart-card p { font-size: 0.78rem; margin-bottom: 12px; }
-        .data-chart-box { min-height: 230px; }
+    .grid-4-cols {
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 10px !important;
+    }
+
+    /* GRID 4 CARD RINGKASAN PERSISI 1 BARIS */
+    .metric-grid-4 {
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 12px !important;
+    }
+
+    .metric-card-styled {
+        background: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        border-top: 3px solid #1e6660 !important;
+        border-radius: 12px !important;
+        padding: 12px 14px !important;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.015) !important;
+    }
+
+    .metric-card-title {
+        font-size: 0.74rem !important;
+        font-weight: 800 !important;
+        color: #64748b !important;
+        text-transform: uppercase !important;
+        margin-bottom: 2px !important;
+    }
+
+    .metric-card-value {
+        font-size: 1.05rem !important;
+        font-weight: 800 !important;
+        color: #0f172a !important;
+        margin-bottom: 8px !important;
+    }
+
+    /* AREA UPLOAD FILE BOX */
+    .file-upload-box {
+        border: 1.5px dashed #cbd5e1 !important;
+        background: #f8fafc !important;
+        border-radius: 10px !important;
+        padding: 12px 14px !important;
+    }
+
+    .btn-action-edit {
+        background: #eff6ff !important;
+        color: #2563eb !important;
+        border: 1px solid #bfdbfe !important;
+        padding: 4px 10px !important;
+        border-radius: 6px !important;
+        font-size: 0.78rem !important;
+        font-weight: 700 !important;
+        text-decoration: none !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 3px !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .btn-action-edit:hover {
+        background: #2563eb !important;
+        color: #ffffff !important;
+    }
+
+    .btn-action-delete {
+        background: #fef2f2 !important;
+        color: #dc2626 !important;
+        border: 1px solid #fecaca !important;
+        padding: 4px 10px !important;
+        border-radius: 6px !important;
+        font-size: 0.78rem !important;
+        font-weight: 700 !important;
+        cursor: pointer !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 3px !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .btn-action-delete:hover {
+        background: #dc2626 !important;
+        color: #ffffff !important;
+    }
+
+    .custom-table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+    }
+    .custom-table th {
+        background: #f8fafc !important;
+        color: #475569 !important;
+        font-size: 0.78rem !important;
+        font-weight: 800 !important;
+        text-transform: uppercase !important;
+        padding: 10px 12px !important;
+        border-bottom: 2px solid #e2e8f0 !important;
+    }
+    .custom-table td {
+        padding: 10px 12px !important;
+        border-bottom: 1px solid #f1f5f9 !important;
+        font-size: 0.85rem !important;
+    }
+
+    @media (max-width: 992px) {
+        .metric-grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
+        .flex-side-item { flex: 1 1 100% !important; }
+        .grid-3-cols, .grid-4-cols { grid-template-columns: repeat(2, 1fr) !important; }
     }
 </style>
-<?php $__env->stopPush(); ?>
 
-<?php $__env->startSection('content'); ?>
+<div class="data-page-admin">
+    <div class="container-fluid px-4 py-3">
 
-<?php
-    $currentCategory = $category ?? request('category', 'ringkasan');
-?>
+        
+        <div class="card admin-hero-card border-0">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                <div>
+                    <span class="hero-eyebrow">⚙️ PANEL ADMIN DESA WAHA</span>
+                    <h2 class="h4 font-weight-bold mb-1 text-white">Kelola Data & Statistik Desa</h2>
+                    <p class="mb-0 text-white-50" style="font-size: 0.88rem;">Kelola indikator kependudukan, perumahan, fasilitas, dan berkas laporan desa secara real-time.</p>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <form method="GET" action="<?php echo e(Route::has('admin.data-desa') ? route('admin.data-desa') : url('/admin/data-desa')); ?>" class="d-flex align-items-center gap-2 m-0">
+                        <label class="text-white font-weight-bold mb-0 text-nowrap" style="font-size: 0.82rem;">Tahun Data:</label>
+                        <select name="year" onchange="this.form.submit()" class="form-control form-control-sm font-weight-bold" style="width: auto; border-radius: 6px; padding: 3px 8px; background: #ffffff; font-size: 0.82rem;">
+                            <?php $__currentLoopData = $years; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $yr): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($yr); ?>" <?php echo e((int)$selectedYear === (int)$yr ? 'selected' : ''); ?>>
+                                    Tahun <?php echo e($yr); ?>
 
-<div class="data-page">
-
-    
-    <section class="data-desa-hero">
-        <div class="container data-desa-hero-inner">
-            <div>
-                <span class="data-hero-eyebrow">TRANSPARANSI DATA DESA</span>
-                <h1>
-                    <?php if($currentCategory === 'perumahan'): ?>
-                        🏠 Data Perumahan & Fasilitas Desa
-                    <?php elseif($currentCategory === 'jaminan_sosial'): ?>
-                        🤝 Data Jaminan & Kesejahteraan Sosial
-                    <?php elseif($currentCategory === 'sosial_demografis'): ?>
-                        👥 Data Sosial Demografis Kependudukan
-                    <?php else: ?>
-                        📊 DATA <?php echo e(strtoupper($activeDesa->name ?? 'DESA WAHA')); ?>
-
-                    <?php endif; ?>
-                </h1>
-                <p>Data resmi statistik desa tahun pendataan <?php echo e($selectedYear ?? date('Y')); ?>.</p>
-            </div>
-
-            
-            <div class="data-hero-controls">
-                <div class="control-year-group">
-                    <label for="yearSelect">Tahun Pendataan</label>
-                    <form method="GET" action="<?php echo e(route('data-desa')); ?>" style="margin:0;">
-                        <?php if(request('category')): ?>
-                            <input type="hidden" name="category" value="<?php echo e(request('category')); ?>">
-                        <?php endif; ?>
-                        <select id="yearSelect" name="year" onchange="this.form.submit()" class="hero-year-select">
-                            <?php $__currentLoopData = $years; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $year): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <option value="<?php echo e($year); ?>" <?php if((int)$year === (int)$selectedYear): echo 'selected'; endif; ?>>Tahun <?php echo e($year); ?></option>
+                                </option>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </form>
+                    <a href="<?php echo e(Route::has('data-desa') ? route('data-desa') : url('/data-desa')); ?>" target="_blank" class="btn btn-light font-weight-bold text-dark btn-sm ml-2" style="border-radius: 6px; font-size: 0.8rem; padding: 4px 10px;">
+                        Lihat Portal Warga ↗
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        
+        <?php if(session('success')): ?>
+            <div class="alert alert-success alert-dismissible fade show border-0 mb-3" role="alert" style="border-radius: 10px; font-weight: 700; background: #d1fae5; color: #065f46; font-size: 0.88rem; padding: 10px 16px;">
+                ✨ <?php echo e(session('success')); ?>
+
+                <button type="button" class="close btn-close" data-dismiss="alert" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
+        <?php if(session('error')): ?>
+            <div class="alert alert-danger alert-dismissible fade show border-0 mb-3" role="alert" style="border-radius: 10px; font-weight: 700; background: #fee2e2; color: #991b1b; font-size: 0.88rem; padding: 10px 16px;">
+                ⚠️ <?php echo e(session('error')); ?>
+
+                <button type="button" class="close btn-close" data-dismiss="alert" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
+
+        
+        <form action="<?php echo e(Route::has('admin.data-desa.update') ? route('admin.data-desa.update') : url('/admin/data-desa/update')); ?>" method="POST">
+            <?php echo csrf_field(); ?>
+            <input type="hidden" name="tahun_data" value="<?php echo e($selectedYear); ?>">
+            
+            <div id="ringkasan" class="card-section-admin">
+                <div class="card-section-header d-flex justify-content-between align-items-center">
+                    <span>📊 4 Ringkasan Utama (Tahun <?php echo e($selectedYear); ?>)</span>
+                </div>
+                <div class="metric-grid-4">
+                    <div class="metric-card-styled">
+                        <div class="metric-card-title">Total Penduduk</div>
+                        <div class="metric-card-value"><?php echo e(number_format($displayStats['total_penduduk'] ?? 0, 0, ',', '.')); ?> Jiwa</div>
+                        <div class="input-group-custom">
+                            <span class="input-group-icon">👥</span>
+                            <input type="number" name="total_penduduk" value="<?php echo e(old('total_penduduk', $displayStats['total_penduduk'] ?? 0)); ?>" class="form-control-styled" required>
+                            <span class="input-group-unit">Jiwa</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card-styled">
+                        <div class="metric-card-title">Kepala Keluarga (KK)</div>
+                        <div class="metric-card-value"><?php echo e(number_format($displayStats['kepala_keluarga'] ?? 0, 0, ',', '.')); ?> KK</div>
+                        <div class="input-group-custom">
+                            <span class="input-group-icon">👨👩👧👦</span>
+                            <input type="number" name="kepala_keluarga" value="<?php echo e(old('kepala_keluarga', $displayStats['kepala_keluarga'] ?? 0)); ?>" class="form-control-styled" required>
+                            <span class="input-group-unit">KK</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card-styled">
+                        <div class="metric-card-title">Laki-laki</div>
+                        <div class="metric-card-value"><?php echo e(number_format($displayStats['laki_laki'] ?? 0, 0, ',', '.')); ?> Jiwa</div>
+                        <div class="input-group-custom">
+                            <span class="input-group-icon">👨</span>
+                            <input type="number" name="laki_laki" value="<?php echo e(old('laki_laki', $displayStats['laki_laki'] ?? 0)); ?>" class="form-control-styled" required>
+                            <span class="input-group-unit">Jiwa</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card-styled">
+                        <div class="metric-card-title">Perempuan</div>
+                        <div class="metric-card-value"><?php echo e(number_format($displayStats['perempuan'] ?? 0, 0, ',', '.')); ?> Jiwa</div>
+                        <div class="input-group-custom">
+                            <span class="input-group-icon">👩</span>
+                            <input type="number" name="perempuan" value="<?php echo e(old('perempuan', $displayStats['perempuan'] ?? 0)); ?>" class="form-control-styled" required>
+                            <span class="input-group-unit">Jiwa</span>
+                        </div>
+                    </div>
+                </div>
+                <p><button type="submit" class="btn btn-sm text-white font-weight-bold shadow-sm" style="background: #1e6660; border-radius: 8px; font-size: 0.8rem; padding: 6px 14px;">
+                        💾 Simpan Ringkasan
+                    </button></p>
+            </div>
+        </form>
+
+        
+        <form action="<?php echo e(Route::has('admin.data-desa.update') ? route('admin.data-desa.update') : url('/admin/data-desa/update')); ?>" method="POST">
+            <?php echo csrf_field(); ?>
+            <input type="hidden" name="tahun_data" value="<?php echo e($selectedYear); ?>">
+
+            <div id="demografi" class="card-section-admin">
+                <div class="card-section-header d-flex justify-content-between align-items-center">
+                    <span>👶 Kelompok Umur & Demografi (ageChart)</span>
+                </div>
+                
+                <div class="flex-side-by-side">
+                    
+                    <div class="flex-side-item" style="flex: 1.3 1 calc(60% - 7px);">
+                        <div class="form-subcard h-100">
+                            <div class="sub-title-teal">🍼 Komposisi Umur Masyarakat</div>
+                            <div class="grid-3-cols mb-2">
+                                <div class="form-group-admin">
+                                    <label>Balita (0-4 Thn)</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="balita" value="<?php echo e(old('balita', $displayStats['balita'] ?? 0)); ?>" class="form-control-styled">
+                                        <span class="input-group-unit">Jiwa</span>
+                                    </div>
+                                </div>
+                                <div class="form-group-admin">
+                                    <label>Anak (5-14 Thn)</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="anak" value="<?php echo e(old('anak', $displayStats['anak'] ?? 0)); ?>" class="form-control-styled">
+                                        <span class="input-group-unit">Jiwa</span>
+                                    </div>
+                                </div>
+                                <div class="form-group-admin">
+                                    <label>Remaja (15-24 Thn)</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="remaja" value="<?php echo e(old('remaja', $displayStats['remaja'] ?? 0)); ?>" class="form-control-styled">
+                                        <span class="input-group-unit">Jiwa</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="grid-2-cols">
+                                <div class="form-group-admin">
+                                    <label>Dewasa (25-59 Thn)</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="dewasa" value="<?php echo e(old('dewasa', $displayStats['dewasa'] ?? 0)); ?>" class="form-control-styled">
+                                        <span class="input-group-unit">Jiwa</span>
+                                    </div>
+                                </div>
+                                <div class="form-group-admin">
+                                    <label>Lansia (60+ Thn)</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="lansia" value="<?php echo e(old('lansia', $displayStats['lansia'] ?? 0)); ?>" class="form-control-styled">
+                                        <span class="input-group-unit">Jiwa</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <p></p>
+                                            <button type="submit" class="btn btn-sm text-white font-weight-bold shadow-sm" style="background: #1e6660; border-radius: 8px; font-size: 0.8rem; padding: 6px 14px;">
+                        💾 Simpan Demografi
+                    </button>
+                    </div>
+
+                    
+                    <div class="flex-side-item" style="flex: 1 1 calc(40% - 7px);">
+                        <div class="form-subcard h-100">
+                            <div class="sub-title-teal">📊 Indikator Kesejahteraan & Wilayah</div>
+                            <div class="form-group-admin mb-2">
+                                <label>Keluarga Miskin</label>
+                                <div class="input-group-custom">
+                                    <input type="number" name="keluarga_miskin" value="<?php echo e(old('keluarga_miskin', $displayStats['keluarga_miskin'] ?? 0)); ?>" class="form-control-styled">
+                                    <span class="input-group-unit">KK</span>
+                                </div>
+                            </div>
+                            <div class="form-group-admin mb-2">
+                                <label>Warga Disabilitas</label>
+                                <div class="input-group-custom">
+                                    <input type="number" name="disabilitas" value="<?php echo e(old('disabilitas', $displayStats['disabilitas'] ?? 0)); ?>" class="form-control-styled">
+                                    <span class="input-group-unit">Jiwa</span>
+                                </div>
+                            </div>
+                            <div class="form-group-admin">
+                                <label>Luas Wilayah Desa</label>
+                                <div class="input-group-custom">
+                                    <input type="text" name="luas_wilayah" value="<?php echo e(old('luas_wilayah', $displayStats['luas_wilayah'] ?? '')); ?>" class="form-control-styled" placeholder="Contoh: 14.5">
+                                    <span class="input-group-unit">Km²</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        
+        <form action="<?php echo e(Route::has('admin.data-desa.update') ? route('admin.data-desa.update') : url('/admin/data-desa/update')); ?>" method="POST">
+            <?php echo csrf_field(); ?>
+            <input type="hidden" name="tahun_data" value="<?php echo e($selectedYear); ?>">
+
+            <div id="perumahan" class="card-section-admin">
+                <div class="card-section-header d-flex justify-content-between align-items-center">
+                    <span>🏠 Jenis Bangunan & Status Tempat Tinggal</span>
+                </div>
+                
+                <div class="flex-side-by-side">
+                    
+                    <div class="flex-side-item">
+                        <div class="form-subcard h-100">
+                            <div class="sub-title-teal">🏢 A. Jenis Bangunan (buildingChart)</div>
+                            <div class="grid-2-cols">
+                                <div class="form-group-admin">
+                                    <label>Rumah Tinggal</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="rumah_tinggal" value="<?php echo e(old('rumah_tinggal', $displayStats['rumah_tinggal'] ?? 0)); ?>" class="form-control-styled">
+                                        <span class="input-group-unit">Unit</span>
+                                    </div>
+                                </div>
+                                <div class="form-group-admin">
+                                    <label>Toko / Ruko</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="toko" value="<?php echo e(old('toko', $displayStats['toko'] ?? 0)); ?>" class="form-control-styled">
+                                        <span class="input-group-unit">Unit</span>
+                                    </div>
+                                </div>
+                                <div class="form-group-admin">
+                                    <label>Fasilitas Umum</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="fasilitas" value="<?php echo e(old('fasilitas', $displayStats['fasilitas'] ?? 0)); ?>" class="form-control-styled">
+                                        <span class="input-group-unit">Unit</span>
+                                    </div>
+                                </div>
+                                <div class="form-group-admin">
+                                    <label>Bangunan Lain</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="bangunan_lain" value="<?php echo e(old('bangunan_lain', $displayStats['bangunan_lain'] ?? 0)); ?>" class="form-control-styled">
+                                        <span class="input-group-unit">Unit</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="flex-side-item">
+                        <div class="form-subcard h-100">
+                            <div class="sub-title-teal">🔑 B. Status Hunian (housingStatusChart)</div>
+                            <div class="grid-2-cols">
+                                <div class="form-group-admin">
+                                    <label>Milik Sendiri</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="rumah_sendiri" value="<?php echo e(old('rumah_sendiri', $displayStats['rumah_sendiri'] ?? 0)); ?>" class="form-control-styled">
+                                        <span class="input-group-unit">KK</span>
+                                    </div>
+                                </div>
+                                <div class="form-group-admin">
+                                    <label>Sewa / Kontrak</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="rumah_sewa" value="<?php echo e(old('rumah_sewa', $displayStats['rumah_sewa'] ?? 0)); ?>" class="form-control-styled">
+                                        <span class="input-group-unit">KK</span>
+                                    </div>
+                                </div>
+                                <div class="form-group-admin">
+                                    <label>Bebas Sewa</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="bebas_sewa" value="<?php echo e(old('bebas_sewa', $displayStats['bebas_sewa'] ?? 0)); ?>" class="form-control-styled">
+                                        <span class="input-group-unit">KK</span>
+                                    </div>
+                                </div>
+                                <div class="form-group-admin">
+                                    <label>Menumpang</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="menumpang" value="<?php echo e(old('menumpang', $displayStats['menumpang'] ?? 0)); ?>" class="form-control-styled">
+                                        <span class="input-group-unit">KK</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <p><button type="submit" class="btn btn-sm text-white font-weight-bold shadow-sm" style="background: #1e6660; border-radius: 8px; font-size: 0.8rem; padding: 6px 14px;">
+                        💾 Simpan Perumahan
+                    </button></p>
+            </div>
+        </form>
+
+        
+        <form action="<?php echo e(Route::has('admin.data-desa.update') ? route('admin.data-desa.update') : url('/admin/data-desa/update')); ?>" method="POST">
+            <?php echo csrf_field(); ?>
+            <input type="hidden" name="tahun_data" value="<?php echo e($selectedYear); ?>">
+
+            <div id="fasilitas" class="card-section-admin">
+                <div class="card-section-header d-flex justify-content-between align-items-center">
+                    <span>🏥 Fasilitas Utama Desa (facilityChart)</span>
+                </div>
+                <div class="form-subcard mb-0">
+                    <div class="grid-4-cols">
+                        <div class="form-group-admin">
+                            <label>🎓 Gedung Sekolah</label>
+                            <div class="input-group-custom">
+                                <input type="number" name="sekolah" value="<?php echo e(old('sekolah', $displayStats['sekolah'] ?? 0)); ?>" class="form-control-styled">
+                                <span class="input-group-unit">Unit</span>
+                            </div>
+                        </div>
+                        <div class="form-group-admin">
+                            <label>🏥 Posyandu</label>
+                            <div class="input-group-custom">
+                                <input type="number" name="posyandu" value="<?php echo e(old('posyandu', $displayStats['posyandu'] ?? 0)); ?>" class="form-control-styled">
+                                <span class="input-group-unit">Unit</span>
+                            </div>
+                        </div>
+                        <div class="form-group-admin">
+                            <label>🩺 Puskesmas / Klinik</label>
+                            <div class="input-group-custom">
+                                <input type="number" name="puskesmas" value="<?php echo e(old('puskesmas', $displayStats['puskesmas'] ?? 0)); ?>" class="form-control-styled">
+                                <span class="input-group-unit">Unit</span>
+                            </div>
+                        </div>
+                        <div class="form-group-admin">
+                            <label>🕌 Tempat Ibadah</label>
+                            <div class="input-group-custom">
+                                <input type="number" name="tempat_ibadah" value="<?php echo e(old('tempat_ibadah', $displayStats['tempat_ibadah'] ?? 0)); ?>" class="form-control-styled">
+                                <span class="input-group-unit">Unit</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p><button type="submit" class="btn btn-sm text-white font-weight-bold shadow-sm" style="background: #1e6660; border-radius: 8px; font-size: 0.8rem; padding: 6px 14px;">
+                        💾 Simpan Fasilitas
+                    </button></p>
+            </div>
+        </form>
+
+        
+        <form action="<?php echo e(Route::has('admin.data-desa.update') ? route('admin.data-desa.update') : url('/admin/data-desa/update')); ?>" method="POST">
+            <?php echo csrf_field(); ?>
+            <input type="hidden" name="tahun_data" value="<?php echo e($selectedYear); ?>">
+
+            <div id="sosial" class="card-section-admin">
+                <div class="card-section-header d-flex justify-content-between align-items-center">
+                    <span>💍 Status Perkawinan & Agama</span>
+                </div>
+                <div class="flex-side-by-side">
+                    <div class="flex-side-item">
+                        <div class="form-subcard h-100">
+                            <div class="sub-title-teal">💍 Status Perkawinan (maritalChart)</div>
+                            <div class="grid-2-cols">
+                                <div class="form-group-admin">
+                                    <label>Belum Kawin</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="belum_kawin" value="<?php echo e(old('belum_kawin', $displayStats['belum_kawin'] ?? 0)); ?>" class="form-control-styled">
+                                        <span class="input-group-unit">Jiwa</span>
+                                    </div>
+                                </div>
+                                <div class="form-group-admin">
+                                    <label>Sudah Kawin</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="kawin" value="<?php echo e(old('kawin', $displayStats['kawin'] ?? 0)); ?>" class="form-control-styled">
+                                        <span class="input-group-unit">Jiwa</span>
+                                    </div>
+                                </div>
+                                <div class="form-group-admin">
+                                    <label>Cerai Hidup</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="cerai_hidup" value="<?php echo e(old('cerai_hidup', $displayStats['cerai_hidup'] ?? 0)); ?>" class="form-control-styled">
+                                        <span class="input-group-unit">Jiwa</span>
+                                    </div>
+                                </div>
+                                <div class="form-group-admin">
+                                    <label>Cerai Mati</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="cerai_mati" value="<?php echo e(old('cerai_mati', $displayStats['cerai_mati'] ?? 0)); ?>" class="form-control-styled">
+                                        <span class="input-group-unit">Jiwa</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-side-item">
+                        <div class="form-subcard h-100">
+                            <div class="sub-title-teal">🕌 Agama & Kepercayaan (religionChart)</div>
+                            <div class="grid-3-cols">
+                                <div class="form-group-admin">
+                                    <label>Islam</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="islam" value="<?php echo e(old('islam', $displayStats['islam'] ?? 0)); ?>" class="form-control-styled">
+                                    </div>
+                                </div>
+                                <div class="form-group-admin">
+                                    <label>Kristen</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="kristen" value="<?php echo e(old('kristen', $displayStats['kristen'] ?? 0)); ?>" class="form-control-styled">
+                                    </div>
+                                </div>
+                                <div class="form-group-admin">
+                                    <label>Katolik</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="katolik" value="<?php echo e(old('katolik', $displayStats['katolik'] ?? 0)); ?>" class="form-control-styled">
+                                    </div>
+                                </div>
+                                <div class="form-group-admin">
+                                    <label>Hindu</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="hindu" value="<?php echo e(old('hindu', $displayStats['hindu'] ?? 0)); ?>" class="form-control-styled">
+                                    </div>
+                                </div>
+                                <div class="form-group-admin">
+                                    <label>Buddha</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="buddha" value="<?php echo e(old('buddha', $displayStats['buddha'] ?? 0)); ?>" class="form-control-styled">
+                                    </div>
+                                </div>
+                                <div class="form-group-admin">
+                                    <label>Khonghucu</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="konghucu" value="<?php echo e(old('konghucu', $displayStats['konghucu'] ?? 0)); ?>" class="form-control-styled">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p><button type="submit" class="btn btn-sm text-white font-weight-bold shadow-sm" style="background: #1e6660; border-radius: 8px; font-size: 0.8rem; padding: 6px 14px;">
+                        💾 Simpan Perkawinan & Agama
+                    </button></p>
+            </div>
+        </form>
+
+        
+        <form action="<?php echo e(Route::has('admin.data-desa.update') ? route('admin.data-desa.update') : url('/admin/data-desa/update')); ?>" method="POST">
+            <?php echo csrf_field(); ?>
+            <input type="hidden" name="tahun_data" value="<?php echo e($selectedYear); ?>">
+
+            <div id="pendidikan" class="card-section-admin">
+                <div class="card-section-header d-flex justify-content-between align-items-center">
+                    <span>🎓 Pendidikan & Mata Pencaharian</span>
+                </div>
+                <div class="flex-side-by-side">
+                    <div class="flex-side-item">
+                        <div class="form-subcard h-100">
+                            <div class="sub-title-teal">🎓 Tingkat Pendidikan (educationChart)</div>
+                            <div class="grid-2-cols">
+                                <div class="form-group-admin">
+                                    <label>Belum Sekolah</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="belum_sekolah" value="<?php echo e(old('belum_sekolah', $displayStats['belum_sekolah'] ?? 0)); ?>" class="form-control-styled">
+                                    </div>
+                                </div>
+                                <div class="form-group-admin">
+                                    <label>SD / Sederajat</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="sd" value="<?php echo e(old('sd', $displayStats['sd'] ?? 0)); ?>" class="form-control-styled">
+                                    </div>
+                                </div>
+                                <div class="form-group-admin">
+                                    <label>SMP / Sederajat</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="smp" value="<?php echo e(old('smp', $displayStats['smp'] ?? 0)); ?>" class="form-control-styled">
+                                    </div>
+                                </div>
+                                <div class="form-group-admin">
+                                    <label>SMA / SMK</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="sma" value="<?php echo e(old('sma', $displayStats['sma'] ?? 0)); ?>" class="form-control-styled">
+                                    </div>
+                                </div>
+                                <div class="form-group-admin">
+                                    <label>Diploma</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="diploma" value="<?php echo e(old('diploma', $displayStats['diploma'] ?? 0)); ?>" class="form-control-styled">
+                                    </div>
+                                </div>
+                                <div class="form-group-admin">
+                                    <label>Sarjana</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="sarjana" value="<?php echo e(old('sarjana', $displayStats['sarjana'] ?? 0)); ?>" class="form-control-styled">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-side-item">
+                        <div class="form-subcard h-100">
+                            <div class="sub-title-teal">💼 Mata Pencaharian (jobChart)</div>
+                            <div class="grid-2-cols">
+                                <div class="form-group-admin">
+                                    <label>Petani / Pekebun</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="petani" value="<?php echo e(old('petani', $displayStats['petani'] ?? 0)); ?>" class="form-control-styled">
+                                    </div>
+                                </div>
+                                <div class="form-group-admin">
+                                    <label>Nelayan</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="nelayan" value="<?php echo e(old('nelayan', $displayStats['nelayan'] ?? 0)); ?>" class="form-control-styled">
+                                    </div>
+                                </div>
+                                <div class="form-group-admin">
+                                    <label>Pedagang</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="pedagang" value="<?php echo e(old('pedagang', $displayStats['pedagang'] ?? 0)); ?>" class="form-control-styled">
+                                    </div>
+                                </div>
+                                <div class="form-group-admin">
+                                    <label>Wiraswasta</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="wiraswasta" value="<?php echo e(old('wiraswasta', $displayStats['wiraswasta'] ?? 0)); ?>" class="form-control-styled">
+                                    </div>
+                                </div>
+                                <div class="form-group-admin">
+                                    <label>PNS / TNI / Polri</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="pns" value="<?php echo e(old('pns', $displayStats['pns'] ?? 0)); ?>" class="form-control-styled">
+                                    </div>
+                                </div>
+                                <div class="form-group-admin">
+                                    <label>Karyawan Swasta</label>
+                                    <div class="input-group-custom">
+                                        <input type="number" name="karyawan" value="<?php echo e(old('karyawan', $displayStats['karyawan'] ?? 0)); ?>" class="form-control-styled">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <p><button type="submit" class="btn btn-sm text-white font-weight-bold shadow-sm" style="background: #1e6660; border-radius: 8px; font-size: 0.8rem; padding: 6px 14px;">
+                        💾 Simpan Pendidikan & Pekerjaan
+                    </button></p>
+            </div>
+        </form>
+
+        
+        <form action="<?php echo e(Route::has('admin.data-desa.update') ? route('admin.data-desa.update') : url('/admin/data-desa/update')); ?>" method="POST" enctype="multipart/form-data">
+            <?php echo csrf_field(); ?>
+
+            <div id="berkas" class="card-section-admin">
+                <div class="card-section-header d-flex justify-content-between align-items-center">
+                    <span>📁 Catatan, Tahun & Unggah Berkas Laporan</span>
+                </div>
+                
+                <div class="row g-2 mb-3">
+                    
+                    <div class="col-md-4">
+                        <div class="form-group-admin">
+                            <label class="font-weight-bold text-dark">📅 Tahun Data Statistik</label>
+                            <div class="input-group-custom">
+                                <span class="input-group-icon">📅</span>
+                                <input type="number" name="tahun_data" value="<?php echo e(old('tahun_data', $selectedYear ?? date('Y'))); ?>" class="form-control-styled" placeholder="2026" min="2000" max="2100" required>
+                                <span class="input-group-unit">TAHUN</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <a class="btn-hero-export" href="<?php echo e(route('data-desa.export', ['format' => 'csv', 'year' => $selectedYear, 'category' => $currentCategory])); ?>">
-                    ↓ Export CSV
-                </a>
+                <div class="form-group-admin mb-3">
+                    <label class="font-weight-bold text-dark">Catatan Ringkasan Statistik (Muncul di Halaman User)</label>
+                    <textarea name="catatan" rows="2" class="form-control-styled border p-2 w-100" style="border-radius: 8px; background: #ffffff; font-size: 0.85rem;" placeholder="Tuliskan gambaran umum data statistik tahun ini..."><?php echo e(old('catatan', $displayStats['catatan'] ?? '')); ?></textarea>
+                </div>
 
-                <a class="btn-hero-export" href="<?php echo e(route('data-desa.export', ['format' => 'pdf', 'year' => $selectedYear, 'category' => $currentCategory])); ?>">
-                    ↓ Export PDF
-                </a>
+                
+                <div class="flex-side-by-side">
+                    <div class="flex-side-item">
+                        <div class="file-upload-box h-100">
+                            <label class="form-label-custom font-weight-bold" style="color: #0f172a; font-size: 0.84rem;">📊 Upload File CSV / Excel (Tahun <?php echo e($selectedYear); ?>)</label>
+                            <input type="file" name="file_csv" accept=".csv,.xlsx,.xls" class="form-control-styled border p-1 bg-white w-100 mb-1" style="border-radius: 6px; font-size: 0.82rem;">
+                            <?php if(!empty($displayStats['file_csv'])): ?>
+                                <small class="text-success mt-1 d-block font-weight-bold" style="font-size: 0.78rem;">
+                                    ✓ Tersimpan: <a href="<?php echo e(asset($displayStats['file_csv'])); ?>" target="_blank" class="text-decoration-underline">Unduh CSV</a>
+                                </small>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <div class="flex-side-item">
+                        <div class="file-upload-box h-100">
+                            <label class="form-label-custom font-weight-bold" style="color: #0f172a; font-size: 0.84rem;">📕 Upload File PDF Laporan Resmi (Tahun <?php echo e($selectedYear); ?>)</label>
+                            <input type="file" name="file_pdf" accept=".pdf" class="form-control-styled border p-1 bg-white w-100 mb-1" style="border-radius: 6px; font-size: 0.82rem;">
+                            <?php if(!empty($displayStats['file_pdf'])): ?>
+                                <small class="text-success mt-1 d-block font-weight-bold" style="font-size: 0.78rem;">
+                                    ✓ Tersimpan: <a href="<?php echo e(asset($displayStats['file_pdf'])); ?>" target="_blank" class="text-decoration-underline">Unduh PDF</a>
+                                </small>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+                <p><button type="submit" class="btn btn-sm text-white font-weight-bold shadow-sm" style="background: #1e6660; border-radius: 8px; font-size: 0.8rem; padding: 6px 14px;">
+                        💾 Simpan Berkas & Laporan
+                    </button></p>
             </div>
-        </div>
-    </section>
-
-    <div class="container">
-
-        
-        <nav class="data-nav">
-            <a href="<?php echo e(route('data-desa')); ?>" class="<?php echo e($currentCategory === 'ringkasan' ? 'active' : ''); ?>">
-                📊 Ringkasan Data
-            </a>
-            <a href="<?php echo e(route('data-desa.category', 'perumahan')); ?>" class="<?php echo e($currentCategory === 'perumahan' ? 'active' : ''); ?>">
-                🏠 Perumahan
-            </a>
-            <a href="<?php echo e(route('data-desa.category', 'jaminan_sosial')); ?>" class="<?php echo e($currentCategory === 'jaminan_sosial' ? 'active' : ''); ?>">
-                🤝 Jaminan Sosial
-            </a>
-            <a href="<?php echo e(route('data-desa.category', 'sosial_demografis')); ?>" class="<?php echo e($currentCategory === 'sosial_demografis' ? 'active' : ''); ?>">
-                👥 Sosial Demografis
-            </a>
-        </nav>
-
-        
-        <div class="data-summary-grid">
-            <div class="summary-item">
-                <span>👥 Total Penduduk</span>
-                <strong><?php echo e(number_format((int)($displayStats['total_penduduk'] ?? 0), 0, ',', '.')); ?></strong>
-                <small>Jiwa</small>
-            </div>
-            <div class="summary-item">
-                <span>🏠 Kepala Keluarga</span>
-                <strong><?php echo e(number_format((int)($displayStats['kepala_keluarga'] ?? 0), 0, ',', '.')); ?></strong>
-                <small>KK</small>
-            </div>
-            <div class="summary-item">
-                <span>👨 Laki-laki</span>
-                <strong><?php echo e(number_format((int)($displayStats['laki_laki'] ?? 0), 0, ',', '.')); ?></strong>
-                <small>Jiwa</small>
-            </div>
-            <div class="summary-item">
-                <span>👩 Perempuan</span>
-                <strong><?php echo e(number_format((int)($displayStats['perempuan'] ?? 0), 0, ',', '.')); ?></strong>
-                <small>Jiwa</small>
-            </div>
-        </div>
+        </form>
 
         
-        <div class="data-chart-grid-three">
-            <div class="data-chart-card">
-                <h3>🏠 Jumlah Bangunan</h3>
-                <p>Kategori jenis bangunan desa</p>
-                <div id="buildingChart" class="data-chart-box"></div>
-            </div>
+        <div class="card-section-admin">
+            <div class="card-section-header">📚 Daftar Berkas Laporan & Arsip Data</div>
 
-            <div class="data-chart-card">
-                <h3>🏡 Status Tempat Tinggal</h3>
-                <p>Status kepemilikan rumah warga</p>
-                <div id="housingStatusChart" class="data-chart-box"></div>
-            </div>
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Tahun Data</th>
+                            <th>File CSV</th>
+                            <th>File PDF</th>
+                            <th>Terakhir Diperbarui</th>
+                            <th style="text-align: center;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $__empty_1 = true; $__currentLoopData = $histories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $history): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                            <?php
+                                $hData = is_array($history->data) ? $history->data : (is_string($history->data) ? json_decode($history->data, true) : []);
+                                $hYear = $history->tahun ?? $history->tahun_data ?? date('Y');
+                                $targetUrl = Route::has('admin.data-desa') 
+                                    ? route('admin.data-desa', ['year' => $hYear, 'tahun' => $hYear, 'tahun_data' => $hYear])
+                                    : url('/admin/data-desa?year=' . $hYear . '&tahun=' . $hYear . '&tahun_data=' . $hYear);
+                            ?>
+                            <tr>
+                                <td><strong style="color: #1e6660;">Tahun <?php echo e($hYear); ?></strong></td>
+                                <td>
+                                    <?php if(!empty($hData['file_csv'])): ?>
+                                        <a href="<?php echo e(asset($hData['file_csv'])); ?>" target="_blank" class="badge badge-success p-1 px-2" style="background: #10b981; font-size: 0.75rem;">
+                                            📊 CSV
+                                        </a>
+                                    <?php else: ?>
+                                        <span class="text-muted">-</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <?php if(!empty($hData['file_pdf'])): ?>
+                                        <a href="<?php echo e(asset($hData['file_pdf'])); ?>" target="_blank" class="badge badge-danger p-1 px-2" style="background: #ef4444; font-size: 0.75rem;">
+                                            📕 PDF
+                                        </a>
+                                    <?php else: ?>
+                                        <span class="text-muted">-</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td><?php echo e($history->updated_at ? \Carbon\Carbon::parse($history->updated_at)->format('d M Y, H:i') : '-'); ?></td>
+                                <td style="text-align: center;">
+                                    <div class="d-flex justify-content-center align-items-center gap-2">
+                                        
+                                        <a href="<?php echo e($targetUrl); ?>#berkas" class="btn-action-edit" onclick="window.location.href='<?php echo e($targetUrl); ?>#berkas'; window.location.reload();">
+                                            ✏️ Edit
+                                        </a>
 
-            <div class="data-chart-card">
-                <h3>🏥 Fasilitas Utama</h3>
-                <p>Fasilitas umum dan sosial</p>
-                <div id="facilityChart" class="data-chart-box"></div>
-            </div>
-        </div>
-
-        
-        <div class="data-chart-grid-two-unequal">
-            <div class="data-chart-card">
-                <h3>📈 Perkembangan Jumlah Penduduk</h3>
-                <p>Tren pertumbuhan jumlah penduduk tahunan</p>
-                <div id="historyChart" class="data-chart-box"></div>
-            </div>
-
-            <div class="data-chart-card">
-                <h3>📍 Penduduk per Dusun</h3>
-                <p>Sebaran warga per wilayah dusun</p>
-                <div id="villageChart" class="data-chart-box"></div>
-            </div>
-        </div>
-
-        
-        <div class="data-chart-grid-two">
-            <div class="data-chart-card">
-                <h3>👶 Kelompok Umur</h3>
-                <p>Komposisi usia masyarakat desa</p>
-                <div id="ageChart" class="data-chart-box"></div>
-            </div>
-
-            <div class="data-chart-card">
-                <h3>💍 Status Perkawinan</h3>
-                <p>Status pernikahan warga terdata</p>
-                <div id="maritalChart" class="data-chart-box"></div>
-            </div>
-        </div>
-
-        
-        <div class="data-chart-grid-two">
-            <div class="data-chart-card">
-                <h3>🕌 Agama & Kepercayaan</h3>
-                <p>Sebaran agama masyarakat</p>
-                <div id="religionChart" class="data-chart-box"></div>
-            </div>
-
-            <div class="data-chart-card">
-                <h3>🎓 Pendidikan</h3>
-                <p>Jenjang pendidikan formal terakhir</p>
-                <div id="educationChart" class="data-chart-box"></div>
+                                        
+                                        <form action="<?php echo e(Route::has('admin.data-desa.riwayat.destroy') ? route('admin.data-desa.riwayat.destroy', $history->id) : url('/admin/data-desa/riwayat/' . $history->id)); ?>" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus seluruh data statistik tahun <?php echo e($hYear); ?>?');" style="display: inline;">
+                                            <?php echo csrf_field(); ?>
+                                            <?php echo method_field('DELETE'); ?>
+                                            <button type="submit" class="btn-action-delete">
+                                                🗑️ Hapus
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                            <tr>
+                                <td colspan="5" class="text-center text-muted py-3">Belum ada berkas data statistik yang tersimpan.</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
             </div>
         </div>
 
         
-        <div class="data-chart-grid-full">
-            <div class="data-chart-card">
-                <h3>💼 Mata Pencaharian / Pekerjaan</h3>
-                <p>Sebaran mata pencaharian utama warga desa</p>
-                <div id="jobChart" class="data-chart-box"></div>
+        <div id="dusun" class="card-section-admin">
+            <div class="card-section-header">🏘️ Kelola Data Dusun & RT (villageChart)</div>
+            
+            
+            <form action="<?php echo e(Route::has('admin.data-desa.wilayah.store') ? route('admin.data-desa.wilayah.store') : url('/admin/data-desa/wilayah')); ?>" method="POST" class="mb-3">
+                <?php echo csrf_field(); ?>
+                <div class="row align-items-end g-2">
+                    <div class="col-md-4">
+                        <label class="form-label-custom">Nama Dusun</label>
+                        <div class="input-group-custom">
+                            <span class="input-group-icon">🏘️</span>
+                            <input type="text" name="nama_dusun" class="form-control-styled" placeholder="Contoh: Dusun I Waha" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label-custom">Jumlah RT</label>
+                        <div class="input-group-custom">
+                            <input type="number" name="jumlah_rt" class="form-control-styled" placeholder="Contoh: 4" required>
+                            <span class="input-group-unit">RT</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label-custom">Jumlah Penduduk Dusun</label>
+                        <div class="input-group-custom">
+                            <input type="number" name="jumlah_penduduk" class="form-control-styled" placeholder="Contoh: 450" required>
+                            <span class="input-group-unit">Jiwa</span>
+                        </div>
+                    </div>
+                    <p></p>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-sm text-white font-weight-bold shadow-sm w-100 justify-content-center" style="background: #1e6660; border-radius: 8px; padding: 8px 10px; font-size: 0.82rem;">
+                            ➕ Tambah
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Nama Dusun</th>
+                            <th>Jumlah RT</th>
+                            <th>Jumlah Penduduk Dusun</th>
+                            <th style="text-align: center;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $__empty_1 = true; $__currentLoopData = $villages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $village): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                            <tr>
+                                <td><strong><?php echo e($village->nama_dusun ?? $village->name); ?></strong></td>
+                                <td><?php echo e($village->jumlah_rt ?? $village->rt_count ?? 0); ?> RT</td>
+                                <td><?php echo e(number_format($village->jumlah_penduduk ?? $village->population ?? 0, 0, ',', '.')); ?> Jiwa</td>
+                                <td style="text-align: center;">
+                                    <form action="<?php echo e(Route::has('admin.data-desa.wilayah.destroy') ? route('admin.data-desa.wilayah.destroy', $village->id) : url('/admin/data-desa/wilayah/' . $village->id)); ?>" method="POST" onsubmit="return confirm('Hapus data dusun ini?');" style="display: inline;">
+                                        <?php echo csrf_field(); ?>
+                                        <?php echo method_field('DELETE'); ?>
+                                        <button type="submit" class="btn-action-delete">🗑️ Hapus</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-3">Belum ada data dusun ditambahkan.</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
             </div>
         </div>
 
     </div>
 </div>
-
-
-<?php if(session('error')): ?>
-    <div id="fileUnavailableModal" style="position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; z-index: 99999; padding: 20px;">
-        <div style="background: #ffffff; width: 100%; max-width: 440px; border-radius: 24px; padding: 30px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: 1px solid #fecaca; animation: modalFadeIn 0.25s ease-out;">
-            <div style="width: 68px; height: 68px; background: #fef2f2; color: #dc2626; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 34px; margin: 0 auto 18px; border: 2px solid #fca5a5;">
-                📂
-            </div>
-            <h3 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0 0 10px; letter-spacing: -0.3px;">Berkas Belum Tersedia</h3>
-            <p style="font-size: 0.92rem; color: #475569; line-height: 1.55; margin: 0 0 24px;">
-                <?php echo e(session('error')); ?>
-
-            </p>
-            <button type="button" onclick="closeFileModal()" style="background: #0f766e; color: #ffffff; border: 0; padding: 13px 28px; border-radius: 14px; font-weight: 800; font-size: 0.94rem; cursor: pointer; transition: all 0.25s ease; width: 100%; box-shadow: 0 4px 15px rgba(15, 118, 110, 0.3);">
-                Siap, Saya Mengerti
-            </button>
-        </div>
-    </div>
-
-    <script>
-        function closeFileModal() {
-            var modal = document.getElementById('fileUnavailableModal');
-            if (modal) {
-                modal.style.opacity = '0';
-                modal.style.transition = 'opacity 0.2s ease';
-                setTimeout(function() { modal.style.display = 'none'; }, 200);
-            }
-            if (window.history.replaceState) {
-                window.history.replaceState(null, '', window.location.pathname);
-            }
-        }
-    </script>
-<?php endif; ?>
-
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startPush('scripts'); ?>
-<script src="<?php echo e(asset('js/data-charts.js')); ?>"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const d = <?php echo json_encode($displayStats, 15, 512) ?>;
-        const histories = <?php echo json_encode($histories ?? [], 15, 512) ?>;
-        const years = histories.map(h => h.tahun || 2025);
-        const populationTrend = histories.map(h => parseInt((h.data && h.data.total_penduduk) || d.total_penduduk || 0));
+        // Auto scroll ke seksi tujuan jika terdapat anchor hash di URL
+        if (window.location.hash) {
+            setTimeout(function() {
+                const targetEl = document.querySelector(window.location.hash);
+                if (targetEl) {
+                    targetEl.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 150);
+        }
 
-        if (document.getElementById('buildingChart')) {
-            DesaCharts.donut(document.getElementById('buildingChart'), ['Rumah Tinggal', 'Toko/Warung', 'Fasilitas Umum', 'Lainnya'], [d.rumah_tinggal || 876, d.toko || 156, d.fasilitas || 124, d.bangunan_lain || 46]);
-        }
-        if (document.getElementById('housingStatusChart')) {
-            DesaCharts.donut(document.getElementById('housingStatusChart'), ['Milik Sendiri', 'Sewa/Kontrak', 'Bebas Sewa', 'Menumpang'], [d.rumah_sendiri || 750, d.rumah_sewa || 120, d.bebas_sewa || 50, d.menumpang || 30]);
-        }
-        if (document.getElementById('facilityChart')) {
-            DesaCharts.donut(document.getElementById('facilityChart'), ['Sekolah', 'Posyandu', 'Puskesmas', 'Tempat Ibadah'], [d.sekolah || 12, d.posyandu || 6, d.puskesmas || 2, d.tempat_ibadah || 18]);
-        }
-        if (document.getElementById('historyChart')) {
-            DesaCharts.line(document.getElementById('historyChart'), years.length ? years : ['2021', '2022', '2023', '2024', '2025'], [], [{ label: 'Jumlah Penduduk', values: populationTrend.length ? populationTrend : [1500, 1620, 1750, 1890, 2050], color: '#2563eb' }]);
-        }
-        if (document.getElementById('villageChart')) {
-            DesaCharts.bar(document.getElementById('villageChart'), <?php echo json_encode($villages->pluck('nama_dusun')->values(), 15, 512) ?>, <?php echo json_encode($villages->pluck('jumlah_penduduk')->map(fn($v) => (int)$v)->values(), 15, 512) ?>, 'jiwa');
-        }
-        if (document.getElementById('ageChart')) {
-            DesaCharts.bar(document.getElementById('ageChart'), ['Balita', 'Anak-anak', 'Remaja', 'Dewasa', 'Lansia'], [d.balita || 180, d.anak || 340, d.remaja || 420, d.dewasa || 890, d.lansia || 220], 'jiwa');
-        }
-        if (document.getElementById('maritalChart')) {
-            DesaCharts.donut(document.getElementById('maritalChart'), ['Belum Kawin', 'Kawin', 'Cerai Hidup', 'Cerai Mati'], [d.belum_kawin || 450, d.kawin || 820, d.cerai_hidup || 45, d.cerai_mati || 65]);
-        }
-        if (document.getElementById('religionChart')) {
-            DesaCharts.donut(document.getElementById('religionChart'), ['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha', 'Konghucu', 'Lainnya'], [d.islam || 1980, d.kristen || 45, d.katolik || 15, d.hindu || 5, d.buddha || 0, d.konghucu || 0, d.kepercayaan_lainnya || 5]);
-        }
-        if (document.getElementById('educationChart')) {
-            DesaCharts.bar(document.getElementById('educationChart'), ['Belum Sekolah', 'SD', 'SMP', 'SMA/SMK', 'Diploma', 'S1/S2/S3'], [d.belum_sekolah || 120, d.sd || 450, d.smp || 380, d.sma || 620, d.diploma || 85, d.sarjana || 140], 'jiwa');
-        }
-        if (document.getElementById('jobChart')) {
-            DesaCharts.bar(document.getElementById('jobChart'), ['Petani', 'Nelayan', 'Pedagang', 'Wiraswasta', 'PNS/TNI/Polri', 'Karyawan', 'Pelajar', 'Belum Bekerja'], [d.petani || 420, d.nelayan || 380, d.pedagang || 150, d.wiraswasta || 190, d.pns || 45, d.karyawan || 210, d.pelajar || 390, d.belum_bekerja || 140], 'jiwa');
-        }
+        const navLinks = document.querySelectorAll('.admin-nav-pills a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function () {
+                navLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
     });
 </script>
 <?php $__env->stopPush(); ?>
